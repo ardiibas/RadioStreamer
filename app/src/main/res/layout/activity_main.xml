@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context="com.ibas.radiostreamer.MainActivity">
+    tools:context="com.ibas.radiostreamer.Main.MainActivity">
 
     <Button
         android:id="@+id/button_play"

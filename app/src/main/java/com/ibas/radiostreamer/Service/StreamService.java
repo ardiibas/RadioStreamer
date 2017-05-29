@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
@@ -15,7 +14,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.ibas.radiostreamer.MainActivity;
+import com.ibas.radiostreamer.Main.MainActivity;
 import com.ibas.radiostreamer.R;
 
 import java.io.IOException;
@@ -30,7 +29,8 @@ public class StreamService extends Service implements
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnBufferingUpdateListener{
 
-    public static final String URL_STREAM = "http://jkt.jogjastreamers.com:8000/jisstereo?s=02766";
+//    public static final String URL_STREAM = "http://usa8-vn.mixstream.net:8138";
+    public static final String URL_STREAM = "http://streaming.unisifm.com/";
 
     private static final int NOTIFICATION_ID = 1;
     private PhoneStateListener phoneStateListener;
@@ -40,7 +40,7 @@ public class StreamService extends Service implements
 
     private Intent bufferIntent;
 
-    public static final String BROADCAST_BUFFER = "id.ibas.radiostreamer";
+    public static final String BROADCAST_BUFFER = "com.ibas.radiostreame";
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
 

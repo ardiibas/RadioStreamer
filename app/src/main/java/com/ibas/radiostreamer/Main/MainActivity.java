@@ -1,4 +1,4 @@
-package com.ibas.radiostreamer;
+package com.ibas.radiostreamer.Main;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ibas.radiostreamer.R;
 import com.ibas.radiostreamer.Service.StreamService;
 import com.ibas.radiostreamer.Utils.Utils;
 
@@ -40,21 +41,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v == button_play){
+            startStreaming();
             Log.d("playStatus", "" + isStreaming);
 
-            if (!isStreaming) {
-                button_play.setText("Stop");
-                startStreaming();
-                Utils.setDataBooleanToSP(this, Utils.IS_STREAM, true);
-            } else {
-                if (isStreaming) {
-                    button_play.setText("Start");
-                    Toast.makeText(this, "Stop Streaming..", Toast.LENGTH_SHORT).show();
-                    stopStreaming();
-                    isStreaming = false;
-                    Utils.setDataBooleanToSP(this, Utils.IS_STREAM, false);
-                }
-            }
+//            if (!isStreaming) {
+//                button_play.setText("Stop");
+//                startStreaming();
+//                Utils.setDataBooleanToSP(this, Utils.IS_STREAM, true);
+//            } else {
+//                if (isStreaming) {
+//                    button_play.setText("Start");
+//                    Toast.makeText(this, "Stop Streaming..", Toast.LENGTH_SHORT).show();
+//                    stopStreaming();
+//                    isStreaming = false;
+//                    Utils.setDataBooleanToSP(this, Utils.IS_STREAM, false);
+//                }
+//            }
         }
     }
 
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startStreaming() {
         Toast.makeText(this, "Start Streaming..", Toast.LENGTH_SHORT).show();
-        stopStreaming();
+//        stopStreaming();
         try {
             startService(serviceIntent);
         } catch (Exception e) {
@@ -88,7 +90,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BroadcastReceiver broadcastBufferReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            
+            showProgressDialog(intent);
+        }
+    };
+
+    private void showProgressDialog(Intent bufferIntent) {
+        String bufferValue = bufferIntent.getStringExtra("buffering");
+        int bufferIntValue = Integer.parseInt(bufferValue);
+        switch (bufferIntValue) {
+            case 0:
+                if (pdBuff != null) {
+                    pdBuff.dismiss();
+                }
+                break;
+
+            case 1:
+                pdBuff = ProgressDialog.show(MainActivity.this, "",
+                        "Streaming...", true);
+                break;
         }
     }
 }
