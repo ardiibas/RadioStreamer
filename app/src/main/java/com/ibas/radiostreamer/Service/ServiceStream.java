@@ -1,16 +1,22 @@
 package com.ibas.radiostreamer.Service;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v7.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import com.ibas.radiostreamer.Main.MainWithService;
 import com.ibas.radiostreamer.R;
 
 import java.io.IOException;
@@ -43,6 +49,7 @@ public class ServiceStream extends Service {
             e.printStackTrace();
         }
 
+        // Phone
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -72,6 +79,28 @@ public class ServiceStream extends Service {
         if (manager != null){
             manager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+
+        // Notification
+        NotificationCompat.Builder builder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_kal_ph)
+                .setContentTitle("Test")
+                .setContentText("Isi test");
+
+        Intent mainIntent = new Intent(this, MainWithService.class);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+
+        taskStackBuilder.addParentStack(MainWithService.class);
+
+        taskStackBuilder.addNextIntent(mainIntent);
+        PendingIntent mainPendingIntent = taskStackBuilder.getPendingIntent(
+                0, PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        builder.setContentIntent(mainPendingIntent);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(
+                Context.NOTIFICATION_SERVICE
+        );
+        notificationManager.notify(1, builder.build());
     }
 
 
