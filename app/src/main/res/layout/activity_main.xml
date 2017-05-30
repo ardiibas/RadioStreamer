@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.ibas.radiostreamer.Main.MainActivity">
 
     <Button
@@ -12,6 +13,13 @@
         android:layout_gravity="center|center_horizontal|center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hubla"/>
+        android:text="Play"/>
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"/>
 
 </LinearLayout>
