@@ -6,8 +6,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.ibas.radiostreamer.R;
@@ -41,7 +42,39 @@ public class ServiceStream extends Service {
         } catch (IOException e){
             e.printStackTrace();
         }
+
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                // INCOMING CALL
+                if (state == TelephonyManager.CALL_STATE_RINGING){
+                    if (mediaPlayer.isPlaying()){
+                        mediaPlayer.pause();
+                    }
+                }
+                // NO CALL
+                if (state == TelephonyManager.CALL_STATE_IDLE){
+                    if (mediaPlayer != null){
+                        mediaPlayer.start();
+                    }
+                }
+                // IN CALL IS DIALING
+                if (state == TelephonyManager.CALL_STATE_OFFHOOK){
+                    if (mediaPlayer.isPlaying()){
+                        mediaPlayer.pause();
+                    }
+                }
+                    super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+
+        TelephonyManager manager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        if (manager != null){
+            manager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
+
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
