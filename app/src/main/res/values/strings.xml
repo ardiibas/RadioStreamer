@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">RadioStreamer</string>
+    <string name="app_name">Radio Streamer</string>
     <string name="URL_BASE">http://stream.radioreklama.bg:80/radio1rock128</string>
 </resources>
